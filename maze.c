@@ -53,7 +53,7 @@ Player* solve(Player* p) {
     map[p->y][p->x] = 'x';
     p->y+=1;
     p->x+=0;
-    printf("hello1\n");
+    printf("moved down\n");
     map[p->y][p->x] = 'O';
     p->active = 'E';
   }
@@ -61,7 +61,7 @@ Player* solve(Player* p) {
     map[p->y][p->x] = 'x';
     p->y-=1;
     p->x+=0;
-    printf("hello2\n");
+    printf("moved up\n");
     map[p->y][p->x] = 'O';
     p->active = 'E';
   }
@@ -69,7 +69,7 @@ Player* solve(Player* p) {
     map[p->y][p->x] = 'x';
     p->y+=0;
     p->x+=1;
-    printf("hello3\n");
+    printf("moved right\n");
     map[p->y][p->x] = 'O';
     p->active = 'E';
   }
@@ -77,7 +77,7 @@ Player* solve(Player* p) {
     map[p->y][p->x] = 'x';
     p->y+=0;
     p->x-=1;
-    printf("hello4\n");
+    printf("moved left\n");
     map[p->y][p->x] = 'O';
     p->active = 'E';
   }
@@ -85,30 +85,31 @@ Player* solve(Player* p) {
     map[p->y][p->x] = 'x';
     p->y+=1;
     p->x+=0;
-    printf("hello1\n");
+    printf("moved down\n");
     map[p->y][p->x] = 'O';
   }
   else if (map[p->y-1][p->x+0] == '.') {
     map[p->y][p->x] = 'x';
     p->y-=1;
     p->x+=0;
-    printf("hello2\n");
+    printf("moved up\n");
     map[p->y][p->x] = 'O';
   }
   else if (map[p->y+0][p->x+1] == '.') {
     map[p->y][p->x] = 'x';
     p->y+=0;
     p->x+=1;
-    printf("hello3\n");
+    printf("moved right\n");
     map[p->y][p->x] = 'O';
   }
   else if (map[p->y+0][p->x-1] == '.') {
     map[p->y][p->x] = 'x';
     p->y+=0;
     p->x-=1;
-    printf("hello4\n");
+    printf("moved left\n");
     map[p->y][p->x] = 'O';
   }
+  printf("after solve: p.y: %d, p.x: %d\n", p->y, p->x);
   return p;
 }
 
@@ -134,12 +135,12 @@ int main() {
   int count = 0;
   // find empty nearby position
   while (p.active != 'E') {
+    printf("\n\n ----- Attempt %d ----- \n\n", count);
     if (count > 100) {
       printf("couldnt solve within 100 attempts\n");
       break;
     }
     solve(&p);
-    printf("after solve %d: p.y: %d, p.x: %d, p.active: %c\n", count, p.y, p.x, p.active);
     printmap();
     count++;
   }
