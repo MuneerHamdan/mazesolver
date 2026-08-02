@@ -3,8 +3,20 @@
 #define WIDTH 8
 #define HEIGHT 8
 
+#define MAXTRIES 40
+
 int solved = 0;
 
+char map0[8][8] = {
+  {"########"},
+  {"S...####"},
+  {"###.####"},
+  {"#......#"},
+  {"#.####.#"},
+  {"#.####.#"},
+  {"#......#"},
+  {"########"}
+};
 char map1[8][8] = {
   {"########"},
   {"S...####"},
@@ -104,6 +116,7 @@ Player* traverse(Player* p) {
 }
 
 Player* backtrack(Player* p) {
+  printf("backtracking\n");
   if (map[p->y+1][p->x+0] == 'x') {
     map[p->y][p->x] = '-';
     p->y+=1;
@@ -133,6 +146,7 @@ Player* backtrack(Player* p) {
     map[p->y][p->x] = 'O';
   }
 }
+
 Player* solve(Player* p) {
 
   printf("solving\n");
@@ -198,26 +212,26 @@ int main() {
 
   int count = 0;
   // find empty nearby position
-  while (solved != 1) {
-//  for (int i = 0; i < 40; i++) {
+//  while (solved != 1) {
+  for (int i = 0; i < MAXTRIES; i++) {
     printf("\n\n ----- Attempt %d ----- \n\n", count);
-    if (count > 100) {
-      printf("couldnt solve within 100 attempts\n");
-      break;
-    }
     solve(&p);
-    printmap();
     if (solved == 1) {
       printf("solved!!!!!!\n");
+      printmap();
       break;
     }
     else if ((map[p.y+1][p.x+0] != '.') && (map[p.y-1][p.x+0] != '.') && (map[p.y+0][p.x+1] != '.') && (map[p.y+0][p.x-1] != '.')) {
-      printf("backtrack\n");
       backtrack(&p);
     }
     traverse(&p);
     count++;
+    printmap();
   }
+
+    if (solved != 1) {
+      printf("couldnt solve within %d attempts\n", MAXTRIES);
+    }
 
   return 0;
 }
