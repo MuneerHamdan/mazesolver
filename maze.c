@@ -71,6 +71,8 @@ typedef struct {
   char active;
 } Player;
 
+Player players[10];
+
 
 void printmap() {
   // print map
@@ -84,11 +86,62 @@ void printmap() {
   printf("\n");
 }
 
-Player* traverse(Player* p) {
-  if (map[p->y+1][p->x+0] == '.') {
+Player* solve(Player* p) {
+
+  printf("solving\n");
+
+  if (map[p->y+1][p->x+0] == 'E') {
     map[p->y][p->x] = 'x';
     p->y+=1;
     p->x+=0;
+    printf("moved down\n");
+    map[p->y][p->x] = 'O';
+    p->active = 'E';
+    solved = 1;
+  }
+  else if (map[p->y-1][p->x+0] == 'E') {
+    map[p->y][p->x] = 'x';
+    p->y-=1;
+    p->x+=0;
+    printf("moved up\n");
+    map[p->y][p->x] = 'O';
+    p->active = 'E';
+    solved = 1;
+  }
+  else if (map[p->y+0][p->x+1] == 'E') {
+    map[p->y][p->x] = 'x';
+    p->y+=0;
+    p->x+=1;
+    printf("moved right\n");
+    map[p->y][p->x] = 'O';
+    p->active = 'E';
+    solved = 1;
+  }
+  else if (map[p->y+0][p->x-1] == 'E') {
+    map[p->y][p->x] = 'x';
+    p->y+=0;
+    p->x-=1;
+    printf("moved left\n");
+    map[p->y][p->x] = 'O';
+    p->active = 'E';
+    solved = 1;
+  }
+  printf("after solve: p.y: %d, p.x: %d\n", p->y, p->x);
+  return p;
+}
+
+Player* traverse(Player* p) {
+  if (map[p->y+1][p->x+0] == '.') {
+
+    Player p2;
+    players[1] = p2;
+    p2.y = p->y+1;
+    p2.x = p->x+0;
+
+    printf("players size: %d\n", sizeof(players) / sizeof(Player));
+    map[p->y][p->x] = 'x';
+//    p->y+=1;
+ //   p->x+=0;
     printf("moved down\n");
     map[p->y][p->x] = 'O';
   }
@@ -147,50 +200,6 @@ Player* backtrack(Player* p) {
   }
 }
 
-Player* solve(Player* p) {
-
-  printf("solving\n");
-
-  if (map[p->y+1][p->x+0] == 'E') {
-    map[p->y][p->x] = 'x';
-    p->y+=1;
-    p->x+=0;
-    printf("moved down\n");
-    map[p->y][p->x] = 'O';
-    p->active = 'E';
-    solved = 1;
-  }
-  else if (map[p->y-1][p->x+0] == 'E') {
-    map[p->y][p->x] = 'x';
-    p->y-=1;
-    p->x+=0;
-    printf("moved up\n");
-    map[p->y][p->x] = 'O';
-    p->active = 'E';
-    solved = 1;
-  }
-  else if (map[p->y+0][p->x+1] == 'E') {
-    map[p->y][p->x] = 'x';
-    p->y+=0;
-    p->x+=1;
-    printf("moved right\n");
-    map[p->y][p->x] = 'O';
-    p->active = 'E';
-    solved = 1;
-  }
-  else if (map[p->y+0][p->x-1] == 'E') {
-    map[p->y][p->x] = 'x';
-    p->y+=0;
-    p->x-=1;
-    printf("moved left\n");
-    map[p->y][p->x] = 'O';
-    p->active = 'E';
-    solved = 1;
-  }
-  printf("after solve: p.y: %d, p.x: %d\n", p->y, p->x);
-  return p;
-}
-
 int main() {
 
   // print initial map
@@ -198,6 +207,7 @@ int main() {
 
   // put player on map
   Player p;
+  players[0] = p;
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
       if (map[i][j] == 'S') {
@@ -210,8 +220,7 @@ int main() {
   }
   printmap();
 
-  int count = 0;
-  // find empty nearby position
+  int count = 1;
 //  while (solved != 1) {
   for (int i = 0; i < MAXTRIES; i++) {
     printf("\n\n ----- Attempt %d ----- \n\n", count);
